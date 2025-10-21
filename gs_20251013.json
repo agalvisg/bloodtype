@@ -1,0 +1,214 @@
+{
+  "parents": [
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "a",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "AB",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "A",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": "O",
+        "rh": "-"
+      }
+    },
+    {
+      "father": {
+        "gs": "B",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "AB",
+        "rh": "-"
+      }
+    },
+    {
+      "father": {
+        "gs": "B",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "B",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "A",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": "B",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "A",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": "a",
+        "rh": "-"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "-"
+      }
+    },
+    {
+      "father": {
+        "gs": "A",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "B",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "A",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "AB",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "AB",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": "A",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "AB",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "AB",
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "A",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "B",
+        "rh": "-"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "+"
+      },
+      "mother": {
+        "gs": 0,
+        "rh": "+"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "B",
+        "rh": "-"
+      }
+    },
+    {
+      "father": {
+        "gs": "O",
+        "rh": "-"
+      },
+      "mother": {
+        "gs": "AB",
+        "rh": "+"
+      }
+    }
+  ]
+}
