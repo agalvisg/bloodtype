@@ -1,48 +1,92 @@
+import os
+import json
+from datetime import datetime
+from persona import Persona
+from genetica import generar_combinaciones, calcular_probabilidades
+from graficos import graficar_porcentajes
 
+# Carpetas de flujo
+PENDING_DIR = "data/pending"
+DONE_DIR = "data/done"
+RESULTS_DIR = "data/results"
+LOG_FILE = "logs/analisis.log"
 
-class GrupoSangDescriptor:  #Se usa para controlar cómo se asignan los valores
-    def __set__(self,instance, value):
-        if value not in ["A","B","AB","O"]:
-            raise ValueError("grupo Sanguíneo inválido")
-        instance.__dict__["grupo_sanguineo"] = value
+# Crear carpetas si no existen
+for carpeta in [PENDING_DIR, DONE_DIR, RESULTS_DIR, os.path.dirname(LOG_FILE)]:
+    if not os.path.exists(carpeta):
+        os.makedirs(carpeta)
 
-    def __get__(self, instance, owner):
-        return instance.__dict__["grupo_sanguineo"]
+def registrar_log(mensaje):
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(f"[{datetime.now()}] {mensaje}\n")
+    print(mensaje)
 
-class Persona:
-    grupo_sanguineo = GrupoSangDescriptor()
-    genotipos_map = {"A": ["AA", "AO"],
-                     "B": ["BB", "BO"],
-                     "AB": ["AB"],
-                     "O": ["OO"]}
+def procesar_archivo(filepath):
+    with open(filepath, "r", encoding="utf-8") as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError as e:
+            registrar_log(f"Error leyendo JSON {filepath}: {e}")
+            return
 
+    resultados_archivo = []
 
-    def __init__(self, nombre, grupo):
-        self.nombre = nombre
-        self.grupo_sanguineo = grupo
+    for i, caso in enumerate(data.get("parents", []), start=1):
+        padre_data = caso.get("father", {})
+        madre_data = caso.get("mother", {})
 
+        # Asignar nombres temporales si no existen
+        padre_nombre = padre_data.get("name") or f"Padre_{i}"
+        madre_nombre = madre_data.get("name") or f"Madre_{i}"
 
-    @property
-    def genotipo(self):
-        return Persona.genotipos_map[self.grupo_sanguineo]
+        try:
+            padre = Persona(nombre=padre_nombre, grupo=padre_data.get("gs"))
+            madre = Persona(nombre=madre_nombre, grupo=madre_data.get("gs"))
+        except Exception as e:
+            registrar_log(f"[Caso {i}] Error creando personas: {e}")
+            continue
 
-    @staticmethod
-    def validar_grupo(grupo):
-        if grupo not in Persona.genotipos_map:
-            raise ValueError("Grupo sanguíneo invalido")
+        porcentajes = calcular_probabilidades(padre, madre)
+        resultados_archivo.append({
+            "father": {"name": padre.nombre, "gs": padre.grupo_sanguineo},
+            "mother": {"name": madre.nombre, "gs": madre.grupo_sanguineo},
+            "probabilities": porcentajes
+        })
 
-def generar_combinaciones(padre,madre):
-    resultados = []
-    for gen_padre in padre.genotipo:
-        for alelo_padre in gen_padre:
-            for gen_madre in madre.genotipo:
-                for alelo_madre in gen_madre:
-                    # combinación ordenada para evitar duplicados como "OA"
-                    combinacion = ''.join(sorted([alelo_padre, alelo_madre]))
-                    (resultados.append(combinacion))
-    return resultados
+        # Generar gráfico
+        try:
+            titulo = f"Probabilidades hijo: {padre.nombre} x {madre.nombre}"
+            graficar_porcentajes(porcentajes, titulo=titulo)
+        except Exception as e:
+            registrar_log(f"[Caso {i}] Error generando gráfico: {e}")
 
+    # Guardar resultados en JSON
+    resultado_filename = os.path.join(
+        RESULTS_DIR,
+        f"result_{os.path.basename(filepath)}"
+    )
+    with open(resultado_filename, "w", encoding="utf-8") as f_out:
+        json.dump({
+            "date": str(datetime.now()),
+            "file_processed": os.path.basename(filepath),
+            "results": resultados_archivo
+        }, f_out, indent=4)
 
-def calcular_probabilidades(padre,madre):
-    
+    # Mover archivo procesado a done
+    done_filepath = os.path.join(DONE_DIR, os.path.basename(filepath))
+    os.replace(filepath, done_filepath)
 
+    registrar_log(f"Archivo procesado correctamente: {filepath}")
+
+def main():
+    archivos = [f for f in os.listdir(PENDING_DIR) if f.endswith(".json")]
+    if not archivos:
+        registrar_log("No hay archivos pendientes en 'data/pending/'")
+        return
+
+    for archivo in archivos:
+        filepath = os.path.join(PENDING_DIR, archivo)
+        procesar_archivo(filepath)
+
+if __name__ == "__main__":
+    main()
